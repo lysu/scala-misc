@@ -1,112 +1,112 @@
 package scala.lysu.scala.misc
 
-sealed trait List[+A]
+sealed trait List2[+A]
 
-case object Nil extends List[Nothing]
+case object Nil2 extends List2[Nothing]
 
-case class Cons[+A](head: A, tail: List[A]) extends List[A]
+case class Cons[+A](head: A, tail: List2[A]) extends List2[A]
 
-object List {
+object List2 {
 
-  def sum(ints: List[Int]): Int =
+  def sum(ints: List2[Int]): Int =
     foldLeft(ints, 0)(_ + _)
 
-  def product(ds: List[Double]): Double =
+  def product(ds: List2[Double]): Double =
     foldLeft(ds, 0.0)(_ * _)
 
-  def len1[A](l: List[A]): Int =
+  def len1[A](l: List2[A]): Int =
     foldLeft(l, 0)((acc, _) => acc + 1)
 
-  def reverse[A](l: List[A]): List[A] =
-    foldLeft(l, List[A]())((acc, h) => Cons(h, acc))
+  def reverse[A](l: List2[A]): List2[A] =
+    foldLeft(l, List2[A]())((acc, h) => Cons(h, acc))
 
-  def tail[A](ls: List[A]): List[A] = ls match {
-    case Nil => Nil
+  def tail[A](ls: List2[A]): List2[A] = ls match {
+    case Nil2 => Nil2
     case Cons(_, xs) => xs
   }
 
-  def drop[A](ls: List[A], n: Int): List[A] = {
+  def drop[A](ls: List2[A], n: Int): List2[A] = {
     if (n <= 0) ls
     else ls match {
-      case Nil => Nil
+      case Nil2 => Nil2
       case Cons(_, t) => drop(t, n - 1)
     }
   }
 
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = {
+  def dropWhile[A](l: List2[A], f: A => Boolean): List2[A] = {
     l match {
       case Cons(h, t) if f(h) => dropWhile(t, f)
       case _ => l
     }
   }
 
-  def append[A](as: List[A], bs: List[A]): List[A] =
-    foldLeft(bs, as)((as: List[A], b: A) => Cons(b, as))
+  def append[A](as: List2[A], bs: List2[A]): List2[A] =
+    foldLeft(bs, as)((as: List2[A], b: A) => Cons(b, as))
 
-  def setHead[A](ls: List[A], a: A): List[A] = ls match {
-    case Nil => Nil
+  def setHead[A](ls: List2[A], a: A): List2[A] = ls match {
+    case Nil2 => Nil2
     case Cons(_, xs) => Cons(a, xs)
   }
 
-  def init[A](l: List[A]): List[A] = {
+  def init[A](l: List2[A]): List2[A] = {
     l match {
-      case Nil => Nil
-      case Cons(_, Nil) => Nil
+      case Nil2 => Nil2
+      case Cons(_, Nil2) => Nil2
       case Cons(h, t) => Cons(h, init(t))
     }
   }
 
-  def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = {
+  def foldRight[A, B](as: List2[A], z: B)(f: (A, B) => B): B = {
     as match {
-      case Nil => z
+      case Nil2 => z
       case Cons(x, xs) => f(x, foldRight(xs, z)(f))
     }
   }
 
-  def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B = as match {
-    case Nil => z
+  def foldLeft[A, B](as: List2[A], z: B)(f: (B, A) => B): B = as match {
+    case Nil2 => z
     case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
   }
 
-  def concat[A](l: List[List[A]]): List[A] =
-    foldRight(l, Nil: List[A])(append)
+  def concat[A](l: List2[List2[A]]): List2[A] =
+    foldRight(l, Nil2: List2[A])(append)
 
-  def map[A,B](as: List[A])(f: A => B): List[B] =
-    foldRight(as, Nil: List[B])((x, y) => Cons(f(x), y))
+  def map[A,B](as: List2[A])(f: A => B): List2[B] =
+    foldRight(as, Nil2: List2[B])((x, y) => Cons(f(x), y))
 
-  def plus1(ints: List[Int]): List[Int] =
+  def plus1(ints: List2[Int]): List2[Int] =
     map(ints)((x) => x + 1)
 
-  def toStrings(ds: List[Double]): List[String] =
+  def toStrings(ds: List2[Double]): List2[String] =
     map(ds)(_.toString)
 
-  def filter[A](as: List[A])(f: A => Boolean): List[A] =
-    foldRight(as, Nil: List[A])((a, acc) => if (f(a)) Cons(a, acc) else acc)
+  def filter[A](as: List2[A])(f: A => Boolean): List2[A] =
+    foldRight(as, Nil2: List2[A])((a, acc) => if (f(a)) Cons(a, acc) else acc)
 
-  def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] =
+  def flatMap[A,B](as: List2[A])(f: A => List2[B]): List2[B] =
     concat(map(as)(f))
 
-  def filter2[A](l: List[A])(f: A=> Boolean): List[A] =
-    flatMap(l)((a) => if(f(a)) List(a) else Nil)
+  def filter2[A](l: List2[A])(f: A=> Boolean): List2[A] =
+    flatMap(l)((a) => if(f(a)) List2(a) else Nil2)
 
-  def zipWith[A,B,C](a: List[A], b: List[B])(f: (A, B) => C): List[C] = (a, b) match {
-    case (Nil, _) => Nil
-    case (_, Nil) => Nil
+  def zipWith[A,B,C](a: List2[A], b: List2[B])(f: (A, B) => C): List2[C] = (a, b) match {
+    case (Nil2, _) => Nil2
+    case (_, Nil2) => Nil2
     case (Cons(x1, xs1), Cons(x2, xs2)) => Cons(f(x1, x2), zipWith(a, b)(f))
   }
 
-  def apply[A](as: A*): List[A] =
-    if (as.isEmpty) Nil
+  def apply[A](as: A*): List2[A] =
+    if (as.isEmpty) Nil2
     else Cons(as.head, apply(as.tail: _*))
 
-  def hasSub[A](sup: List[A], sub: List[A]): Boolean = sup match {
-    case Nil => sub == Nil
+  def hasSub[A](sup: List2[A], sub: List2[A]): Boolean = sup match {
+    case Nil2 => sub == Nil2
     case _ if startWith(sup, sub) => true
     case Cons(x, xs) => hasSub(xs, sub)
   }
 
-  def startWith[A](l: List[A], prefix: List[A]): Boolean = (l, prefix) match {
-    case (_, Nil) => true
+  def startWith[A](l: List2[A], prefix: List2[A]): Boolean = (l, prefix) match {
+    case (_, Nil2) => true
     case (Cons(h, t), Cons(h2, t2)) if h == h2 => startWith(t, t2)
     case _ => false
   }
@@ -148,11 +148,11 @@ object Struct {
 
   def main(args: Array[String]) {
 
-    val x = List(1, 2, 3, 4, 5) match {
+    val x = List2(1, 2, 3, 4, 5) match {
       case Cons(x, Cons(2, Cons(4, _))) => x
-      case Nil => 42
+      case Nil2 => 42
       case Cons(x, Cons(y, Cons(3, Cons(4, _)))) => x + y
-      case Cons(h, t) => h + List.sum(t)
+      case Cons(h, t) => h + List2.sum(t)
       case _ => 101
     }
     println(x)
